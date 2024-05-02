@@ -7,7 +7,7 @@ import (
 )
 
 type config struct {
-	dbPath string
+	DBPath string
 }
 
 func Parse(path string) (config, error) {
@@ -19,7 +19,7 @@ func Parse(path string) (config, error) {
 		return ret, err
 	}
 	doc := unmarshal(string(data))
-	ret.dbPath = doc["db"].(string)
+	ret.DBPath = doc["db"].(string)
 
 	return ret, err
 }
