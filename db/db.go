@@ -59,25 +59,28 @@ func (db DB) Get(i int) {
 	fmt.Printf("---\n%s---\n\n%s", noListIndent(fm), content)
 }
 
-func check(data map[string]interface{}, sub string) bool {
-	for _, value := range data {
-		switch v := value.(type) {
-		case string:
-			if strings.Contains(v, sub) {
+func check(data interface{}, sub string) bool {
+	switch v := data.(type) {
+	case string:
+		if strings.Contains(v, sub) {
+			return true
+		}
+	case []string:
+		for _, item := range v {
+			if strings.Contains(item, sub) {
 				return true
-
 			}
-		case map[string]interface{}:
-			if check(v, sub) {
+		}
+	case []interface{}:
+		for _, item := range v {
+			if check(item, sub) {
 				return true
 			}
-		case []interface{}:
-			for _, item := range v {
-				if m, ok := item.(map[string]interface{}); ok {
-					if check(m, sub) {
-						return true
-					}
-				}
+		}
+	case map[string]interface{}:
+		for _, item := range v {
+			if check(item, sub) {
+				return true
 			}
 		}
 	}
